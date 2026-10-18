@@ -109,8 +109,8 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 .bio{margin-bottom:16px}
 .bio::after{content:"";display:block;clear:both}
 .bio p:last-child{margin-bottom:0}
-.headshot{float:right;width:190px;margin:2px 0 10px 28px;shape-outside:circle(50%);shape-margin:12px}
-.headshot img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;object-position:center;border-radius:50%;border:4px solid var(--surface);box-shadow:0 14px 30px -20px color-mix(in srgb,var(--ink) 50%,transparent);background:var(--tint1)}
+.headshot{float:right;width:180px;margin:2px 0 10px 28px;shape-outside:inset(0 round 18px);shape-margin:8px}
+.headshot img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center;border-radius:18px;border:4px solid var(--surface);box-shadow:0 14px 30px -20px color-mix(in srgb,var(--ink) 50%,transparent);background:var(--tint1)}
 @media (max-width:520px){.headshot{width:120px;margin-left:16px}}
 .why{display:grid;gap:14px;margin-top:8px}
 .why div{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
@@ -217,9 +217,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
       </div>
       <div class="about-copy">
         <div class="bio">
-          <figure class="headshot"><img src="headshot.jpg" alt="Headshot of Joanna J." width="600" height="600" onerror="this.parentElement.hidden=true"></figure>
+          <figure class="headshot"><img src="headshot.jpg?v=3" alt="Headshot of Joanna J." width="600" height="750" onerror="this.parentElement.hidden=true"></figure>
           <p>I'm Joanna, a Bay Area voice actor with a warm, upbeat sound that feels like talking to a friend. I've always loved bringing characters to life, and some of my favorite performances happen at home, doing voices for my son's characters. Whether it's an animated character, a commercial, or calm narration that helps people slow down and unwind, I bring that same warmth and fun to every read.</p>
-          <p>Off the mic, I'm an attorney and law school director in Silicon Valley, where I teach, host conferences, and welcome full rooms of people. Speaking clearly and warmly to an audience is part of my everyday life.</p>
+          <p>Off the mic, I'm an attorney and law school director in Silicon Valley, where I lecture on law, direct a high tech law program, and deliver remarks at national legal conferences. Speaking clearly and warmly to an audience is part of my everyday life.</p>
           <p>Both sides shape how I work. I bring playfulness to every read and preparation to every project. I read scripts closely, take direction quickly, and take every deadline seriously, so you get a creative partner and a reliable professional.</p>
         </div>
         <div class="why">
