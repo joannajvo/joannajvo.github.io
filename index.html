@@ -75,12 +75,13 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 .meter{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
 
 /* demos */
-.demos{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
-@media (max-width:960px){.demos{grid-template-columns:1fr}}
-.reel{border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.demos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:36px}
+@media (max-width:720px){.demos{grid-template-columns:1fr}}
+.reel{border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .reel.t1{background:var(--tint1)} .reel.t2{background:var(--tint2)} .reel.t3{background:var(--tint3)}
 .reel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.reel h3{font-size:1.5rem;font-weight:700}
+.reel h3{font-size:1.35rem;font-weight:700}
+.reel > p{font-size:.9rem!important;line-height:1.5}
 .reel.wide{grid-column:span 2}
 @media (max-width:960px){.reel.wide{grid-column:auto}}
 .cat{margin:0 0 6px!important;font-family:var(--mono);font-size:.7rem!important;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -204,7 +205,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
     <div class="wrap">
       <p class="eyebrow">Demo reels</p>
       <h2>Have a listen</h2>
-      <p class="lede">Short original spots across animation, meditation, and commercial styles. All brands and characters are fictional. Press play, or open a script to follow along. If you need a specific read, send a sample script and I'll record a free audition.</p>
+      <p class="lede">Short original spots across animation, meditation, commercial, and audiobook styles. All brands and characters are fictional. Press play, or open a script to follow along. If you need a specific read, send a sample script and I'll record a free audition.</p>
       <div class="demos" id="demoGrid"></div>
     </div>
   </section>
@@ -306,7 +307,6 @@ const DEMOS = [
   "cat": "Animation",
   "title": "Lila at the Royal Ball",
   "tint": "t1",
-  "wide": true,
   "file": "demos/animation-lila.mp3",
   "len": "30–35 sec",
   "desc": "An upbeat, chatty overthinker at her first royal ball. Bright, bubbly, and talking a mile a minute.",
@@ -376,6 +376,21 @@ const DEMOS = [
    "Confident"
   ],
   "script": "I have twelve minutes.\nWhich is apparently enough time to get dressed, find my keys, and become a morning person.\nTwo out of three.\nBarelight Skin Tint. A few drops. Blend with your fingers. Out the door.\nLightweight coverage. A fresh, dewy finish.\nOh, there are my keys.\nBarelight. Looking ready counts."
+ },
+ {
+  "id": "audiobook",
+  "cat": "Audiobook",
+  "title": "The Lantern Room",
+  "tint": "t3",
+  "file": "demos/audiobook-lantern-room.mp3",
+  "len": "55–65 sec",
+  "desc": "Warm, intimate storytelling with steady pacing and two distinct, natural character voices.",
+  "tags": [
+   "Storyteller",
+   "Intimate",
+   "Mysterious"
+  ],
+  "script": "Chapter One.\nThe letter arrived on a Tuesday, which was the first strange thing, because nothing ever arrived at Gull Point on a Tuesday.\nNora turned the envelope over twice. No stamp. No return address. Just her name, written in handwriting she hadn't seen in eleven years.\nHer grandmother's.\n[Beat.]\n\"You going to open it, or just stare it to death?\" Mr. Abernathy asked from the doorway, rain dripping from the brim of his hat.\n\"I'm thinking,\" Nora said.\n\"Think faster. Ferry leaves at four.\"\nShe slid a finger under the flap. Inside was a single brass key and a note, only five words long.\nThe lantern room. Tell no one.\n[Beat.]\nNora looked up at the lighthouse. It had been dark for as long as anyone could remember.\n[Softer.] Tonight, for the first time in eleven years, a light was on."
  }
 ];
 
