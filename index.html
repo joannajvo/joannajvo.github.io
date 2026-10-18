@@ -246,27 +246,33 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
           <button class="small-btn" type="button" id="copyEmail">Copy email</button>
         </div>
       </div>
-      <form id="inquiry" novalidate>
+      <form id="inquiry" action="https://formsubmit.co/jrmpadua@gmail.com" method="POST">
+        <input type="hidden" name="_subject" id="h-subject" value="New voice over inquiry">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://joannajvo.github.io/?sent=1#book">
+        <input type="hidden" name="_autoresponse" id="h-auto" value="Thanks for reaching out! I've received your voice over request and will reply within 1 business day. Talk soon, Joanna J.">
+        <input type="hidden" name="Deadline" id="h-deadline" value="">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div class="row">
-          <label for="f-name">Your name<input id="f-name" placeholder="Alex Rivera"></label>
-          <label for="f-email">Your email<input id="f-email" type="email" placeholder="alex@brightside.com" required></label>
+          <label for="f-name">Your name<input id="f-name" name="Name" placeholder="Alex Rivera" required></label>
+          <label for="f-email">Your email<input id="f-email" name="email" type="email" placeholder="alex@brightside.com" required></label>
         </div>
         <div class="row">
-          <label for="f-co">Company<input id="f-co" placeholder="Brightside Studio"></label>
+          <label for="f-co">Company<input id="f-co" name="Company" placeholder="Brightside Studio"></label>
           <div class="field"><label for="f-due">Deadline</label><input id="f-due" type="date">
             <label class="check" for="f-nodue"><input id="f-nodue" type="checkbox"> No deadline / flexible</label></div>
         </div>
         <div class="row">
           <label for="f-type">Project type
-            <select id="f-type"><option>Commercial</option><option>Character / animation</option><option>Audiobook</option><option>Other</option></select></label>
-          <label for="f-len">Script length<input id="f-len" placeholder="e.g. 30-second spot, 250 words"></label>
+            <select id="f-type" name="Project type"><option>Commercial</option><option>Character / animation</option><option>Audiobook</option><option>Other</option></select></label>
+          <label for="f-len">Script length<input id="f-len" name="Script length" placeholder="e.g. 30-second spot, 250 words"></label>
         </div>
         <div class="row">
-          <label for="f-use">Usage<span class="sub">Where the recording will run and for how long</span><input id="f-use" placeholder="e.g. Social media ads, 1 year, US"></label>
+          <label for="f-use">Usage<span class="sub">Where the recording will run and for how long</span><input id="f-use" name="Usage" placeholder="e.g. Social media ads, 1 year, US"></label>
         </div>
-        <label for="f-notes">Direction or notes<textarea id="f-notes" placeholder="Tone, pace, references, or anything else I should know"></textarea></label>
+        <label for="f-notes">Direction or notes<textarea id="f-notes" name="Notes" placeholder="Tone, pace, references, or anything else I should know"></textarea></label>
         <button class="btn" type="submit" id="sendBtn">Send inquiry</button>
-        <p class="hint" id="formHint">Your message goes straight to Joanna's inbox.</p>
+        <p class="hint" id="formHint">Your message goes straight to Joanna's inbox, and you'll get an email confirming it arrived.</p>
       </form>
     </div>
   </section>
@@ -373,35 +379,22 @@ async function copyText(text, okMsg, selectEl){
 }
 document.getElementById("copyEmail").addEventListener("click", () => copyText(document.getElementById("emailAddr").textContent, "Email copied", document.getElementById("emailAddr")));
 document.getElementById("f-nodue").addEventListener("change", e => { const d = document.getElementById("f-due"); d.disabled = e.target.checked; if(e.target.checked) d.value = ""; });
-const FORM_ENDPOINT ="https://formsubmit.co/ajax/jrmpadua@gmail.com";
-document.getElementById("inquiry").addEventListener("submit", async e => {
-  e.preventDefault();
-  const form = e.currentTarget, btn = document.getElementById("sendBtn"), hint = document.getElementById("formHint");
+document.getElementById("inquiry").addEventListener("submit", e => {
   const v = id => document.getElementById(id).value.trim();
-  const email = v("f-email");
-  if(!v("f-name") || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    hint.textContent = "Please add your name and a valid email so Joanna can reply."; return;
+  const hint = document.getElementById("formHint");
+  if(!v("f-name") || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("f-email"))){
+    e.preventDefault(); hint.textContent = "Please add your name and a valid email so Joanna can reply."; return;
   }
-  const data = {
-    _subject: `New voice over inquiry from ${v("f-name")}`,
-    _template: "table", _captcha: "false", _replyto: email,
-    _autoresponse: `Hi ${v("f-name")},\n\nThanks for reaching out! I've received your voice over request and will reply within 1 business day.\n\nTalk soon,\nJoanna J.\njoannajvo.github.io`,
-    Name: v("f-name"), email: email, Company: v("f-co") || "—",
-    "Project type": v("f-type"), "Script length": v("f-len") || "—",
-    Usage: v("f-use") || "—", Deadline: document.getElementById("f-nodue").checked ? "No deadline / flexible" : (v("f-due") || "—"), Notes: v("f-notes") || "—"
-  };
-  btn.disabled = true; btn.textContent = "Sending…";
-  try{
-    const r = await fetch(FORM_ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body:JSON.stringify(data)});
-    const j = await r.json().catch(()=>({}));
-    if(!r.ok || j.success === "false" || j.success === false) throw new Error(j.message || "send failed");
-    form.reset(); document.getElementById("f-due").disabled = false;
-    hint.textContent = "Thanks! Your inquiry was sent. Check your inbox for a confirmation. Joanna will reply within one business day.";
-    toast("Inquiry sent");
-  }catch(err){
-    hint.textContent = "Your inquiry didn't go through. Please try again, or email jrmpadua@gmail.com directly.";
-  }finally{ btn.disabled = false; btn.textContent = "Send inquiry"; }
+  document.getElementById("h-deadline").value = document.getElementById("f-nodue").checked ? "No deadline / flexible" : (v("f-due") || "Not given");
+  document.getElementById("h-subject").value = "New voice over inquiry from " + v("f-name");
+  document.getElementById("h-auto").value = "Hi " + v("f-name") + ", thanks for reaching out! I've received your voice over request and will reply within 1 business day. Talk soon, Joanna J.";
+  const btn = document.getElementById("sendBtn"); btn.textContent = "Sending…";
 });
+if(new URLSearchParams(location.search).get("sent") === "1"){
+  document.getElementById("formHint").textContent = "Thanks! Your inquiry was sent. Check your inbox for a confirmation. Joanna will reply within one business day.";
+  setTimeout(() => toast("Inquiry sent"), 400);
+  history.replaceState(null, "", location.pathname + "#book");
+}
 </script>
 
 </body>
