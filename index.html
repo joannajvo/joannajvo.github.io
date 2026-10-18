@@ -138,6 +138,11 @@ label{display:grid;gap:6px;font-weight:600;font-size:.88rem}
 input,select,textarea{font:400 1rem var(--body);padding:11px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
 textarea{min-height:90px;resize:vertical}
 .hint{font-size:.85rem;color:var(--muted);margin:0}
+.field{display:grid;gap:6px;align-content:start;font-weight:600;font-size:.88rem}
+.sub{font-weight:400;font-size:.8rem;color:var(--muted);margin-top:-4px}
+label.check{display:flex;align-items:center;gap:8px;font-weight:500;font-size:.85rem;color:var(--muted);cursor:pointer}
+label.check input{width:auto;accent-color:var(--accent)}
+input:disabled{opacity:.5}
 footer{padding-block:32px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 
@@ -248,7 +253,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
         </div>
         <div class="row">
           <label for="f-co">Company<input id="f-co" placeholder="Brightside Studio"></label>
-          <label for="f-due">Deadline<input id="f-due" type="date"></label>
+          <div class="field"><label for="f-due">Deadline</label><input id="f-due" type="date">
+            <label class="check" for="f-nodue"><input id="f-nodue" type="checkbox"> No deadline / flexible</label></div>
         </div>
         <div class="row">
           <label for="f-type">Project type
@@ -256,7 +262,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
           <label for="f-len">Script length<input id="f-len" placeholder="e.g. 30-second spot, 250 words"></label>
         </div>
         <div class="row">
-          <label for="f-use">Usage<input id="f-use" placeholder="e.g. Online, 1 year, US"></label>
+          <label for="f-use">Usage<span class="sub">Where the recording will run and for how long</span><input id="f-use" placeholder="e.g. Social media ads, 1 year, US"></label>
         </div>
         <label for="f-notes">Direction or notes<textarea id="f-notes" placeholder="Tone, pace, references, or anything else I should know"></textarea></label>
         <button class="btn" type="submit" id="sendBtn">Send inquiry</button>
@@ -366,7 +372,8 @@ async function copyText(text, okMsg, selectEl){
          toast("Couldn't copy automatically. Select the text and copy it."); }
 }
 document.getElementById("copyEmail").addEventListener("click", () => copyText(document.getElementById("emailAddr").textContent, "Email copied", document.getElementById("emailAddr")));
-const FORM_ENDPOINT = "https://formsubmit.co/ajax/jrmpadua@gmail.com";
+document.getElementById("f-nodue").addEventListener("change", e => { const d = document.getElementById("f-due"); d.disabled = e.target.checked; if(e.target.checked) d.value = ""; });
+const FORM_ENDPOINT ="https://formsubmit.co/ajax/jrmpadua@gmail.com";
 document.getElementById("inquiry").addEventListener("submit", async e => {
   e.preventDefault();
   const form = e.currentTarget, btn = document.getElementById("sendBtn"), hint = document.getElementById("formHint");
@@ -378,16 +385,18 @@ document.getElementById("inquiry").addEventListener("submit", async e => {
   const data = {
     _subject: `New voice over inquiry from ${v("f-name")}`,
     _template: "table", _captcha: "false", _replyto: email,
-    Name: v("f-name"), Email: email, Company: v("f-co") || "—",
+    _autoresponse: `Hi ${v("f-name")},\n\nThanks for reaching out! I've received your voice over request and will reply within 1 business day.\n\nTalk soon,\nJoanna J.\njoannajvo.github.io`,
+    Name: v("f-name"), email: email, Company: v("f-co") || "—",
     "Project type": v("f-type"), "Script length": v("f-len") || "—",
-    Usage: v("f-use") || "—", Deadline: v("f-due") || "—", Notes: v("f-notes") || "—"
+    Usage: v("f-use") || "—", Deadline: document.getElementById("f-nodue").checked ? "No deadline / flexible" : (v("f-due") || "—"), Notes: v("f-notes") || "—"
   };
   btn.disabled = true; btn.textContent = "Sending…";
   try{
     const r = await fetch(FORM_ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body:JSON.stringify(data)});
     const j = await r.json().catch(()=>({}));
     if(!r.ok || j.success === "false" || j.success === false) throw new Error(j.message || "send failed");
-    form.reset(); hint.textContent = "Thanks! Your inquiry was sent. Joanna will reply within one business day.";
+    form.reset(); document.getElementById("f-due").disabled = false;
+    hint.textContent = "Thanks! Your inquiry was sent. Check your inbox for a confirmation. Joanna will reply within one business day.";
     toast("Inquiry sent");
   }catch(err){
     hint.textContent = "Your inquiry didn't go through. Please try again, or email jrmpadua@gmail.com directly.";
