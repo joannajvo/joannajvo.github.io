@@ -80,7 +80,14 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 .reel{border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .reel.t1{background:var(--tint1)} .reel.t2{background:var(--tint2)} .reel.t3{background:var(--tint3)}
 .reel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.reel h3{font-size:1.6rem;font-weight:700}
+.reel h3{font-size:1.5rem;font-weight:700}
+.reel.wide{grid-column:span 2}
+@media (max-width:960px){.reel.wide{grid-column:auto}}
+.cat{margin:0 0 6px!important;font-family:var(--mono);font-size:.7rem!important;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.script summary{cursor:pointer;font-weight:600;font-size:.88rem;color:var(--accent);list-style-position:inside}
+.script div{margin-top:10px;padding:14px 16px;background:var(--surface);border-radius:12px;font-size:.9rem;line-height:1.55}
+.script div p{margin:0 0 6px;color:var(--ink)!important;font-size:.9rem!important}
+.script em{color:var(--muted);font-style:italic}
 .status{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--surface);color:var(--muted);white-space:nowrap}
 .status.live{color:var(--accent)}
 .reel p{margin:0;color:var(--muted);font-size:.95rem}
@@ -190,7 +197,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
     <div class="wrap">
       <p class="eyebrow">Demo reels</p>
       <h2>Have a listen</h2>
-      <p class="lede">Each reel runs about a minute. Press play on one, then compare. If you need a specific read, send a sample script and I'll record a free audition.</p>
+      <p class="lede">Short original spots across animation, meditation, and commercial styles. All brands and characters are fictional. Press play, or open a script to follow along. If you need a specific read, send a sample script and I'll record a free audition.</p>
       <div class="demos" id="demoGrid"></div>
     </div>
   </section>
@@ -283,15 +290,82 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 
 <script>
 const DEMOS = [
-  {id:"commercial", title:"Commercial", tint:"t1", file:"demos/commercial.mp3",
-   desc:"Warm, conversational, and upbeat, for tech, lifestyle, and retail spots.",
-   tags:["Girl next door","Upbeat","Trustworthy"]},
-  {id:"character", title:"Character & Animation", tint:"t2", file:"demos/character.mp3",
-   desc:"Playful sidekicks, spirited heroes, and a villain or two, for games and cartoons.",
-   tags:["Animated","Quirky","Range"]},
-  {id:"audiobook", title:"Audiobook", tint:"t3", file:"demos/audiobook.mp3",
-   desc:"Engaging fiction and clear non-fiction, with distinct character voices.",
-   tags:["Storyteller","Intimate","Steady"]},
+ {
+  "id": "lila",
+  "cat": "Animation",
+  "title": "Lila at the Royal Ball",
+  "tint": "t1",
+  "wide": true,
+  "file": "demos/animation-lila.mp3",
+  "len": "30–35 sec",
+  "desc": "An upbeat, chatty overthinker at her first royal ball. Bright, bubbly, and talking a mile a minute.",
+  "tags": [
+   "Bubbly",
+   "Comedic",
+   "Fast-paced"
+  ],
+  "script": "Okay, Lila. First royal ball. Totally normal evening. Just a room full of people who own crowns.\nWe know how to talk to people!\n[Beat.] Do we curtsy first, or say hello? Because if I do both, I could bite my tongue.\n[Distracted, delighted.] Oh my gosh, this dress has pockets!\nFocus. We're going to walk in, smile, and say something charming.\n[Practicing, overly formal.] \"Your Majesty. Love what you've done with… the kingdom.\"\n[Winces.] Okay, we'll workshop that.\n[A door opens. Instantly cheerful.] Hiii! Am I early?\n[Under her breath.] Why did we wave with both hands?"
+ },
+ {
+  "id": "meditation",
+  "cat": "Meditation",
+  "title": "A Quiet Nighttime Wind-Down",
+  "tint": "t2",
+  "file": "demos/meditation-wind-down.mp3",
+  "len": "35–40 sec",
+  "desc": "Spacious, reassuring, and unhurried, in a natural voice with room to breathe.",
+  "tags": [
+   "Calm",
+   "Intimate",
+   "Reassuring"
+  ],
+  "script": "The day is coming to a close.\nYou might still feel some of it with you.\nA conversation. An unfinished task. A thought that keeps coming back.\nThere's no need to push any of it away.\nFeel the pillow beneath your head.\nLet your jaw soften.\nAnd allow your next breath to come and go, without changing it.\nWhen another thought arrives, you can let it pass.\nFor now, simply rest here."
+ },
+ {
+  "id": "poprocket",
+  "cat": "Family commercial",
+  "title": "Pop Rocket",
+  "tint": "t3",
+  "file": "demos/commercial-pop-rocket.mp3",
+  "len": "20 sec",
+  "desc": "Punchy, mischievous, and playful, like a parent sharing an inside joke.",
+  "tags": [
+   "Playful",
+   "Punchy",
+   "Family"
+  ],
+  "script": "Warning: opening a box of Pop Rockets may cause sudden backyard stampedes.\nThe sprinkler? On.\nThe dog? Soaked.\nDad? Taking a water balloon directly to the cargo shorts.\nAnd you? Excellent choice of hiding spot.\nPop Rocket frozen fruit pops. Big fruity flavor. Gloriously sticky memories.\nGrab one before the kids count them."
+ },
+ {
+  "id": "evermile",
+  "cat": "Cinematic commercial",
+  "title": "Evermile",
+  "tint": "t1",
+  "file": "demos/commercial-evermile.mp3",
+  "len": "25–30 sec",
+  "desc": "Restrained and cinematic, with quiet confidence, deliberate pauses, and warmth.",
+  "tags": [
+   "Cinematic",
+   "Warm",
+   "Understated"
+  ],
+  "script": "At five forty-two, the town is still asleep.\nYou turn the key.\nThere's coffee in the cup holder. A bag in the back. Someone waiting two hundred miles from here.\nThe road ahead is familiar.\nBut you never get tired of the moment you arrive.\nThe Evermile S6.\nFor every \"See you soon.\""
+ },
+ {
+  "id": "barelight",
+  "cat": "Beauty commercial",
+  "title": "Barelight",
+  "tint": "t2",
+  "file": "demos/commercial-barelight.mp3",
+  "len": "20–25 sec",
+  "desc": "Modern, close, and effortlessly confident, with a little humor and a clean finish.",
+  "tags": [
+   "Conversational",
+   "Modern",
+   "Confident"
+  ],
+  "script": "I have twelve minutes.\nWhich is apparently enough time to get dressed, find my keys, and become a morning person.\nTwo out of three.\nBarelight Skin Tint. A few drops. Blend with your fingers. Out the door.\nLightweight coverage. A fresh, dewy finish.\nOh, there are my keys.\nBarelight. Looking ready counts."
+ }
 ];
 
 const toastEl = document.getElementById("toast"); let toastT;
@@ -306,12 +380,15 @@ const grid = document.getElementById("demoGrid");
 let current = null;
 DEMOS.forEach((d, i) => {
   const el = document.createElement("article");
-  el.className = "reel " + d.tint;
-  el.innerHTML = `<div class="reel-head"><h3>${d.title}</h3><span class="status">Coming soon</span></div>
+  el.className = "reel " + d.tint + (d.wide ? " wide" : "");
+  const esc = t => t.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  const scriptHtml = esc(d.script).split("\n").map(l => "<p>" + l.replace(/\[([^\]]+)\]/g, '<em>[$1]</em>') + "</p>").join("");
+  el.innerHTML = `<div class="reel-head"><div><p class="cat">${d.cat} · ${d.len}</p><h3>${d.title}</h3></div><span class="status">Coming soon</span></div>
     <p>${d.desc}</p>
     <div class="player"><button class="play" type="button" aria-label="Play ${d.title} demo" disabled>${PLAY}</button>
       <div class="track"><canvas></canvas><div class="time"><span class="cur">0:00</span><span class="dur">—</span></div></div></div>
-    <div class="tags">${d.tags.map(t=>`<span>${t}</span>`).join("")}</div>`;
+    <div class="tags">${d.tags.map(t=>`<span>${t}</span>`).join("")}</div>
+    <details class="script"><summary>Read the script</summary><div>${scriptHtml}</div></details>`;
   grid.appendChild(el);
   const btn = el.querySelector(".play"), cv = el.querySelector("canvas"), status = el.querySelector(".status");
   const rnd = seeded(31 + i*97); const bars = Array.from({length:120}, (_, k) => 0.25 + 0.75*Math.abs(Math.sin(k*0.21 + i))*(0.45 + 0.55*rnd()));
