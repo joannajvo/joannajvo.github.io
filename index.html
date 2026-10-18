@@ -394,36 +394,37 @@ DEMOS.forEach((d, i) => {
   const rnd = seeded(31 + i*97); const bars = Array.from({length:120}, (_, k) => 0.25 + 0.75*Math.abs(Math.sin(k*0.21 + i))*(0.45 + 0.55*rnd()));
   const audio = new Audio(); audio.preload = "metadata";
   d.state = {audio, progress:0};
-  function draw(){
+  let colors = null;
+  function draw(fresh){
     const w = cv.clientWidth, h = cv.clientHeight, dpr = devicePixelRatio || 1;
     if(!w) return; if(cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)){ cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr); }
+    if(!colors || fresh === true) colors = {on: css("--accent"), off: css("--line")};
     const c = cv.getContext("2d"); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,w,h);
     const n = Math.max(24, Math.floor(w/5)), bw = w/n;
-    const on = css("--accent"), off = css("--line");
+    const path = new Path2D();
     for(let k=0;k<n;k++){ const v = bars[Math.floor(k*bars.length/n)], bh = Math.max(3, v*h);
-      c.fillStyle = (k/n) < d.state.progress ? on : off;
-      c.beginPath(); c.roundRect(k*bw+1, (h-bh)/2, Math.max(2, bw-2), bh, 2); c.fill(); }
+      path.roundRect(k*bw+1, (h-bh)/2, Math.max(2, bw-2), bh, 2); }
+    c.fillStyle = colors.off; c.fill(path);
+    const px = w * d.state.progress;
+    if(px > 0){ c.save(); c.beginPath(); c.rect(0, 0, px, h); c.clip(); c.fillStyle = colors.on; c.fill(path); c.restore(); }
   }
   new ResizeObserver(draw).observe(cv);
-  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
-  new MutationObserver(draw).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => draw(true));
+  new MutationObserver(() => draw(true)).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
 
   fetch(d.file, {method:"HEAD"}).then(r => {
     const ct = r.headers.get("content-type") || "";
     if(r.ok && ct.startsWith("audio")){ audio.src = d.file; btn.disabled = false; status.textContent = "Listen"; status.classList.add("live"); }
   }).catch(()=>{});
   audio.addEventListener("loadedmetadata", () => el.querySelector(".dur").textContent = fmt(audio.duration));
-  const cur = el.querySelector(".cur"); let raf = 0, smooth = 0, lastT = 0, lastStamp = 0;
+  const cur = el.querySelector(".cur"); let raf = 0;
   function sync(){ d.state.progress = audio.duration ? audio.currentTime/audio.duration : 0; cur.textContent = fmt(audio.currentTime); draw(); }
-  function tick(now){
-    // advance smoothly between the browser's coarse time updates
-    if(audio.currentTime !== lastT){ lastT = audio.currentTime; lastStamp = now; smooth = lastT; }
-    else smooth = lastT + (now - lastStamp)/1000 * audio.playbackRate;
-    const t = Math.min(smooth, audio.duration || smooth);
+  function tick(){
+    const t = audio.currentTime;
     d.state.progress = audio.duration ? t/audio.duration : 0; cur.textContent = fmt(t); draw();
     raf = requestAnimationFrame(tick);
   }
-  audio.addEventListener("play", () => { btn.innerHTML = PAUSE; lastT = -1; cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); });
+  audio.addEventListener("play", () => { btn.innerHTML = PAUSE; cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); });
   audio.addEventListener("pause", () => { btn.innerHTML = PLAY; cancelAnimationFrame(raf); sync(); });
   audio.addEventListener("seeked", () => { if(audio.paused) sync(); });
   audio.addEventListener("ended", () => { btn.innerHTML = PLAY; cancelAnimationFrame(raf); d.state.progress = 0; cur.textContent = "0:00"; draw(); });
