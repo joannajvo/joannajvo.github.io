@@ -396,8 +396,8 @@ DEMOS.forEach((d, i) => {
   d.state = {audio, progress:0};
   function draw(){
     const w = cv.clientWidth, h = cv.clientHeight, dpr = devicePixelRatio || 1;
-    if(!w) return; cv.width = w*dpr; cv.height = h*dpr;
-    const c = cv.getContext("2d"); c.scale(dpr, dpr);
+    if(!w) return; if(cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)){ cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr); }
+    const c = cv.getContext("2d"); c.setTransform(dpr,0,0,dpr,0,0); c.clearRect(0,0,w,h);
     const n = Math.max(24, Math.floor(w/5)), bw = w/n;
     const on = css("--accent"), off = css("--line");
     for(let k=0;k<n;k++){ const v = bars[Math.floor(k*bars.length/n)], bh = Math.max(3, v*h);
@@ -413,10 +413,20 @@ DEMOS.forEach((d, i) => {
     if(r.ok && ct.startsWith("audio")){ audio.src = d.file; btn.disabled = false; status.textContent = "Listen"; status.classList.add("live"); }
   }).catch(()=>{});
   audio.addEventListener("loadedmetadata", () => el.querySelector(".dur").textContent = fmt(audio.duration));
-  audio.addEventListener("timeupdate", () => { d.state.progress = audio.duration ? audio.currentTime/audio.duration : 0; el.querySelector(".cur").textContent = fmt(audio.currentTime); draw(); });
-  audio.addEventListener("ended", () => { btn.innerHTML = PLAY; d.state.progress = 0; draw(); });
-  audio.addEventListener("pause", () => btn.innerHTML = PLAY);
-  audio.addEventListener("play", () => btn.innerHTML = PAUSE);
+  const cur = el.querySelector(".cur"); let raf = 0, smooth = 0, lastT = 0, lastStamp = 0;
+  function sync(){ d.state.progress = audio.duration ? audio.currentTime/audio.duration : 0; cur.textContent = fmt(audio.currentTime); draw(); }
+  function tick(now){
+    // advance smoothly between the browser's coarse time updates
+    if(audio.currentTime !== lastT){ lastT = audio.currentTime; lastStamp = now; smooth = lastT; }
+    else smooth = lastT + (now - lastStamp)/1000 * audio.playbackRate;
+    const t = Math.min(smooth, audio.duration || smooth);
+    d.state.progress = audio.duration ? t/audio.duration : 0; cur.textContent = fmt(t); draw();
+    raf = requestAnimationFrame(tick);
+  }
+  audio.addEventListener("play", () => { btn.innerHTML = PAUSE; lastT = -1; cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); });
+  audio.addEventListener("pause", () => { btn.innerHTML = PLAY; cancelAnimationFrame(raf); sync(); });
+  audio.addEventListener("seeked", () => { if(audio.paused) sync(); });
+  audio.addEventListener("ended", () => { btn.innerHTML = PLAY; cancelAnimationFrame(raf); d.state.progress = 0; cur.textContent = "0:00"; draw(); });
   btn.addEventListener("click", () => {
     if(audio.paused){ if(current && current !== audio) current.pause(); current = audio; audio.play().catch(()=>toast("That demo couldn't play. Try again in a moment.")); }
     else audio.pause();
