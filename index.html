@@ -105,6 +105,10 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 .about{display:grid;grid-template-columns:1fr 1.3fr;gap:48px;align-items:start}
 @media (max-width:860px){.about{grid-template-columns:1fr}}
 .about-copy p{margin:0 0 16px;max-width:62ch}
+.about-side{display:grid;gap:14px;align-content:start}
+.headshot{margin:14px 0 0;max-width:340px}
+.headshot img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:22px;border:6px solid var(--surface);box-shadow:0 18px 40px -24px color-mix(in srgb,var(--ink) 50%,transparent);background:var(--tint1)}
+@media (max-width:860px){.headshot{max-width:280px}}
 .why{display:grid;gap:14px;margin-top:8px}
 .why div{display:grid;grid-template-columns:40px 1fr;gap:14px;align-items:start;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
 .why b{font-family:var(--display);font-size:1.1rem;display:block}
@@ -204,17 +208,19 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 
   <section id="about">
     <div class="wrap about">
-      <div>
+      <div class="about-side">
         <p class="eyebrow">About</p>
         <h2>Friendly on mic, focused off it</h2>
+        <figure class="headshot"><img src="headshot.jpg" alt="Headshot of Joanna J." width="600" height="750" onerror="this.parentElement.hidden=true"></figure>
       </div>
       <div class="about-copy">
-        <p>I'm Joanna, a Bay Area voice actor with a warm, upbeat sound that feels like talking to a friend who knows what she's doing. I voice commercials that sound like a real person, characters with real personality, and audiobooks you can listen to for hours.</p>
-        <p>My day job is in law, so I read scripts closely, show up prepared, and take every deadline seriously. You get a creative partner and a reliable professional.</p>
+        <p>I'm Joanna, a Bay Area voice actor with a warm, upbeat sound that feels like talking to a friend who knows what she's doing. I voice commercials that sound like a real person, characters with real personality, and calm narration that helps people slow down and unwind.</p>
+        <p>Off the mic, I'm an attorney and law school director in Silicon Valley. I teach, host conferences, and welcome full rooms of people, so speaking clearly and warmly to an audience is part of my everyday life.</p>
+        <p>That background shapes how I work. I read scripts closely, take direction quickly, and take every deadline seriously. You get a creative partner and a reliable professional.</p>
         <div class="why">
           <div><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></span><p style="margin:0"><b>Fast turnaround</b><small>Short scripts are typically delivered within one business day.</small></p></div>
-          <div><span class="ico"><svg viewBox="0 0 24 24"><path d="M3 12h3l3-8 4 16 3-8h5"/></svg></span><p style="margin:0"><b>Broadcast-ready audio</b><small>Clean, edited files in the format you need, with pickups included.</small></p></div>
-          <div><span class="ico"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><p style="margin:0"><b>Clear on rights</b><small>Plain-English usage terms, so nobody is surprised later.</small></p></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24"><path d="M3 12h3l3-8 4 16 3-8h5"/></svg></span><p style="margin:0"><b>Broadcast-ready audio</b><small>Clean, edited files in the format you need.</small></p></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4M8 22h8"/></svg></span><p style="margin:0"><b>Easy to direct</b><small>Years of teaching and public speaking mean I take notes well and adjust quickly.</small></p></div>
         </div>
       </div>
     </div>
@@ -229,7 +235,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
         <div class="spec"><p class="eyebrow">Format</p><strong>WAV 48k / 24</strong><span>MP3 or other formats on request</span></div>
         <div class="spec"><p class="eyebrow">Audiobooks</p><strong>ACX-ready</strong><span>Steady, consistent narration from the first chapter to the last</span></div>
         <div class="spec"><p class="eyebrow">Directed sessions</p><strong>Zoom · Meet</strong><span>Live direction from anywhere</span></div>
-        <div class="spec"><p class="eyebrow">Pickups</p><strong>Included</strong><span>Small script changes and my errors are fixed free</span></div>
+        <div class="spec"><p class="eyebrow">Revisions</p><strong>Small fixes</strong><span>If I misread a line or you tweak a few words, I'll re-record it</span></div>
       </div>
       <div class="gear-head"><h3>My equipment</h3><span class="eyebrow">Mic to file</span></div>
       <div class="chain">
