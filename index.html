@@ -15,7 +15,7 @@
 :root{
   --bg:#FFFFFF; --surface:#F6F9FF; --ink:#13254A; --muted:#55627D; --line:#E1E8F4;
   --accent:#1F66E5; --accent-ink:#FFFFFF; --sun:#FFC83D;
-  --tint1:#E7F0FF; --tint2:#E3F6F2; --tint3:#FFF4D6;
+  --tint1:#E7F0FF; --tint2:#E2F3F8; --tint3:#ECEBFF;
   --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --body:"Figtree", "Helvetica Neue", Arial, system-ui, sans-serif;
   --mono:"DM Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -24,11 +24,11 @@
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
   --bg:#0E1A33; --surface:#16264A; --ink:#EEF3FF; --muted:#A7B4CF; --line:#273A63;
   --accent:#5B9BFF; --accent-ink:#0A1530; --sun:#FFD15C;
-  --tint1:#18305C; --tint2:#143D40; --tint3:#3A3220; color-scheme:dark; } }
+  --tint1:#18305C; --tint2:#123B4C; --tint3:#272B5E; color-scheme:dark; } }
 :root[data-theme="dark"]{
   --bg:#0E1A33; --surface:#16264A; --ink:#EEF3FF; --muted:#A7B4CF; --line:#273A63;
   --accent:#5B9BFF; --accent-ink:#0A1530; --sun:#FFD15C;
-  --tint1:#18305C; --tint2:#143D40; --tint3:#3A3220; color-scheme:dark; }
+  --tint1:#18305C; --tint2:#123B4C; --tint3:#272B5E; color-scheme:dark; }
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;}
@@ -103,9 +103,8 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 .tags span{font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 
 /* about */
-.about{display:grid;grid-template-columns:1fr 1.3fr;gap:48px;align-items:start}
-@media (max-width:860px){.about{grid-template-columns:1fr}}
-.about-copy p{margin:0 0 16px;max-width:62ch}
+.about{display:grid;grid-template-columns:minmax(0,820px);gap:18px;align-items:start}
+.about-copy p{margin:0 0 16px}
 .about-side{display:grid;gap:14px;align-content:start}
 .bio{margin-bottom:16px}
 .bio::after{content:"";display:block;clear:both}
