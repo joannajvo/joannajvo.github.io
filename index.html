@@ -104,10 +104,10 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 
 /* about */
 .about{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
-.about-copy{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:32px;align-items:start}
+.about-copy{display:flex;flex-direction:column;gap:26px}
 .about-copy .bio{margin-bottom:0}
-.about-copy .why{margin-top:0}
-@media (max-width:900px){.about-copy{grid-template-columns:minmax(0,1fr);gap:20px}}
+.about-copy .why{order:-1;margin-top:0;grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:820px){.about-copy .why{grid-template-columns:minmax(0,1fr)}}
 .about-copy p{margin:0 0 16px}
 .about-side{display:grid;gap:14px;align-content:start}
 .bio{margin-bottom:16px}
