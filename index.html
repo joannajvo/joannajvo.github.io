@@ -103,7 +103,11 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 .tags span{font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 
 /* about */
-.about{display:grid;grid-template-columns:minmax(0,820px);gap:18px;align-items:start}
+.about{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
+.about-copy{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:32px;align-items:start}
+.about-copy .bio{margin-bottom:0}
+.about-copy .why{margin-top:0}
+@media (max-width:900px){.about-copy{grid-template-columns:minmax(0,1fr);gap:20px}}
 .about-copy p{margin:0 0 16px}
 .about-side{display:grid;gap:14px;align-content:start}
 .bio{margin-bottom:16px}
