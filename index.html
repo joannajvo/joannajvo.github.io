@@ -323,7 +323,7 @@ const DEMOS = [
  },
  {
   "id": "poprocket",
-  "cat": "Family commercial",
+  "cat": "Family Commercial",
   "title": "Pop Rocket",
   "tint": "t3",
   "file": "demos/commercial-pop-rocket.mp3",
@@ -338,7 +338,7 @@ const DEMOS = [
  },
  {
   "id": "evermile",
-  "cat": "Cinematic commercial",
+  "cat": "Cinematic Commercial",
   "title": "Evermile",
   "tint": "t1",
   "file": "demos/commercial-evermile.mp3",
@@ -353,7 +353,7 @@ const DEMOS = [
  },
  {
   "id": "barelight",
-  "cat": "Beauty commercial",
+  "cat": "Beauty Commercial",
   "title": "Barelight",
   "tint": "t2",
   "file": "demos/commercial-barelight.mp3",
@@ -383,9 +383,9 @@ DEMOS.forEach((d, i) => {
   el.className = "reel " + d.tint + (d.wide ? " wide" : "");
   const esc = t => t.replace(/&/g,"&amp;").replace(/</g,"&lt;");
   const scriptHtml = esc(d.script).split("\n").map(l => "<p>" + l.replace(/\[([^\]]+)\]/g, '<em>[$1]</em>') + "</p>").join("");
-  el.innerHTML = `<div class="reel-head"><div><p class="cat">${d.cat} · ${d.len}</p><h3>${d.title}</h3></div><span class="status">Coming soon</span></div>
+  el.innerHTML = `<div class="reel-head"><div><p class="cat">${d.title} · ${d.len}</p><h3>${d.cat}</h3></div><span class="status">Coming soon</span></div>
     <p>${d.desc}</p>
-    <div class="player"><button class="play" type="button" aria-label="Play ${d.title} demo" disabled>${PLAY}</button>
+    <div class="player"><button class="play" type="button" aria-label="Play ${d.cat} demo: ${d.title}" disabled>${PLAY}</button>
       <div class="track"><canvas></canvas><div class="time"><span class="cur">0:00</span><span class="dur">—</span></div></div></div>
     <div class="tags">${d.tags.map(t=>`<span>${t}</span>`).join("")}</div>
     <details class="script"><summary>Read the script</summary><div>${scriptHtml}</div></details>`;
