@@ -235,7 +235,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
       <div>
         <p class="eyebrow">Booking</p>
         <h2>Let's make something</h2>
-        <p class="lede">Fill in the project details and copy them into an email, or write to me directly. I reply within one business day.</p>
+        <p class="lede">Send me your project details with the form, or write to me directly. I reply within one business day.</p>
         <div class="email">
           <code id="emailAddr">jrmpadua@gmail.com</code>
           <button class="small-btn" type="button" id="copyEmail">Copy email</button>
@@ -244,7 +244,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
       <form id="inquiry" novalidate>
         <div class="row">
           <label for="f-name">Your name<input id="f-name" placeholder="Alex Rivera"></label>
+          <label for="f-email">Your email<input id="f-email" type="email" placeholder="alex@brightside.com" required></label>
+        </div>
+        <div class="row">
           <label for="f-co">Company<input id="f-co" placeholder="Brightside Studio"></label>
+          <label for="f-due">Deadline<input id="f-due" type="date"></label>
         </div>
         <div class="row">
           <label for="f-type">Project type
@@ -253,11 +257,10 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
         </div>
         <div class="row">
           <label for="f-use">Usage<input id="f-use" placeholder="e.g. Online, 1 year, US"></label>
-          <label for="f-due">Deadline<input id="f-due" type="date"></label>
         </div>
         <label for="f-notes">Direction or notes<textarea id="f-notes" placeholder="Tone, pace, references, or anything else I should know"></textarea></label>
-        <button class="btn" type="submit">Copy inquiry</button>
-        <p class="hint">This copies your details so you can paste them into an email.</p>
+        <button class="btn" type="submit" id="sendBtn">Send inquiry</button>
+        <p class="hint" id="formHint">Your message goes straight to Joanna's inbox.</p>
       </form>
     </div>
   </section>
@@ -363,11 +366,32 @@ async function copyText(text, okMsg, selectEl){
          toast("Couldn't copy automatically. Select the text and copy it."); }
 }
 document.getElementById("copyEmail").addEventListener("click", () => copyText(document.getElementById("emailAddr").textContent, "Email copied", document.getElementById("emailAddr")));
-document.getElementById("inquiry").addEventListener("submit", e => {
+const FORM_ENDPOINT = "https://formsubmit.co/ajax/jrmpadua@gmail.com";
+document.getElementById("inquiry").addEventListener("submit", async e => {
   e.preventDefault();
-  const v = id => document.getElementById(id).value.trim() || "—";
-  const text = `Hi Joanna,\n\nI'd like to book a voice over.\n\nName: ${v("f-name")}\nCompany: ${v("f-co")}\nProject type: ${v("f-type")}\nScript length: ${v("f-len")}\nUsage: ${v("f-use")}\nDeadline: ${v("f-due")}\nNotes: ${v("f-notes")}\n\nThanks!`;
-  copyText(text, "Inquiry copied. Paste it into an email to Joanna.");
+  const form = e.currentTarget, btn = document.getElementById("sendBtn"), hint = document.getElementById("formHint");
+  const v = id => document.getElementById(id).value.trim();
+  const email = v("f-email");
+  if(!v("f-name") || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    hint.textContent = "Please add your name and a valid email so Joanna can reply."; return;
+  }
+  const data = {
+    _subject: `New voice over inquiry from ${v("f-name")}`,
+    _template: "table", _captcha: "false", _replyto: email,
+    Name: v("f-name"), Email: email, Company: v("f-co") || "—",
+    "Project type": v("f-type"), "Script length": v("f-len") || "—",
+    Usage: v("f-use") || "—", Deadline: v("f-due") || "—", Notes: v("f-notes") || "—"
+  };
+  btn.disabled = true; btn.textContent = "Sending…";
+  try{
+    const r = await fetch(FORM_ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json", Accept:"application/json"}, body:JSON.stringify(data)});
+    const j = await r.json().catch(()=>({}));
+    if(!r.ok || j.success === "false" || j.success === false) throw new Error(j.message || "send failed");
+    form.reset(); hint.textContent = "Thanks! Your inquiry was sent. Joanna will reply within one business day.";
+    toast("Inquiry sent");
+  }catch(err){
+    hint.textContent = "Your inquiry didn't go through. Please try again, or email jrmpadua@gmail.com directly.";
+  }finally{ btn.disabled = false; btn.textContent = "Send inquiry"; }
 });
 </script>
 
