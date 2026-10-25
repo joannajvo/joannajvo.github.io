@@ -351,19 +351,32 @@ const DEMOS = [
   "script": "[Deep breath, hyping herself up.] Okay, Lila. First royal ball. Totally normal evening. Just a room full of people who own crowns.\nWe know how to talk to people!\nDo we curtsy first, or say hello? Because if I do both, I could bite my tongue.\n[Distracted, delighted gasp.] Oh my gosh, this dress has pockets!\nFocus. We're going to walk in, smile, and say something charming.\n\"Your Majesty. Love what you've done with... the kingdom.\"\nOkay, we'll workshop that.\n[A door opens. Instantly cheerful, a little too loud.]\nHiii! Am I early?\n[Under her breath, mortified.] Why did we wave with both hands?"
  },
  {
-  "id": "audiobook",
-  "cat": "Audiobook",
-  "title": "The Lantern Room",
+  "id": "romance",
+  "cat": "Romance Audiobook",
+  "title": "Narration sample",
   "tint": "t1",
-  "file": "demos/audiobook-lantern-room.mp3?v=5",
-  "len": "70–75 sec",
-  "desc": "Warm, intimate storytelling with steady pacing and two distinct, natural character voices.",
+  "file": "demos/audiobook-romance.mp3",
+  "len": "5½ min",
+  "desc": "Warm, intimate narration with emotional nuance, paced for long-form listening.",
   "tags": [
-   "Storyteller",
+   "Warm",
    "Intimate",
-   "Mysterious"
-  ],
-  "script": "[Warm, steady.] Chapter One.\nThe letter arrived on a Tuesday, which was the first strange thing, because nothing ever arrived at Gull Point on a Tuesday.\nNora turned the envelope over twice. No stamp. No return address. Just her name, written in handwriting she hadn't seen in eleven years.\n[Pause. Quiet, weighted.] Her grandmother's.\n\"You going to open it, or just stare it to death?\" Mr. Abernathy asked from the doorway, rain dripping from the brim of his hat.\n\"I'm thinking,\" Nora said.\n\"Think faster. Ferry leaves at four.\"\nShe slid a finger under the flap. Inside was a single brass key and a note, only five words long.\n[Hushed, deliberate.] The lantern room. Tell no one.\nNora looked up at the lighthouse. It had been dark for as long as anyone could remember.\nTonight, for the first time in eleven years, a light was on."
+   "Long-form"
+  ]
+ },
+ {
+  "id": "mgfantasy",
+  "cat": "Middle Grade Fantasy",
+  "title": "Family dialogue",
+  "tint": "t2",
+  "file": "demos/audiobook-middle-grade-fantasy.mp3",
+  "len": "2 min",
+  "desc": "Bright, versatile storytelling with distinct voices for a whole family in conversation.",
+  "tags": [
+   "Versatile",
+   "Character voices",
+   "Family-friendly"
+  ]
  },
  {
   "id": "explainer",
@@ -411,13 +424,13 @@ DEMOS.forEach((d, i) => {
   const el = document.createElement("article");
   el.className = "reel " + d.tint + (d.wide ? " wide" : "");
   const esc = t => t.replace(/&/g,"&amp;").replace(/</g,"&lt;");
-  const scriptHtml = esc(d.script).split("\n").map(l => "<p>" + l.replace(/\[([^\]]+)\]/g, '<em>[$1]</em>') + "</p>").join("");
+  const scriptHtml = d.script ? esc(d.script).split("\n").map(l => "<p>" + l.replace(/\[([^\]]+)\]/g, '<em>[$1]</em>') + "</p>").join("") : "";
   el.innerHTML = `<div class="reel-head"><div><p class="cat">${d.title} · ${d.len}</p><h3>${d.cat}</h3></div><span class="status">Coming soon</span></div>
     <p>${d.desc}</p>
     <div class="player"><button class="play" type="button" aria-label="Play ${d.cat} demo: ${d.title}" disabled>${PLAY}</button>
       <div class="track"><canvas></canvas><div class="time"><span class="cur">0:00</span><span class="dur">—</span></div></div></div>
     <div class="tags">${d.tags.map(t=>`<span>${t}</span>`).join("")}</div>
-    <details class="script"><summary>Read the script</summary><div>${scriptHtml}</div></details>`;
+    ${scriptHtml ? `<details class="script"><summary>Read the script</summary><div>${scriptHtml}</div></details>` : ""}`;
   grid.appendChild(el);
   const btn = el.querySelector(".play"), cv = el.querySelector("canvas"), status = el.querySelector(".status");
   const rnd = seeded(31 + i*97); const bars = Array.from({length:120}, (_, k) => 0.25 + 0.75*Math.abs(Math.sin(k*0.21 + i))*(0.45 + 0.55*rnd()));
