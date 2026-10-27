@@ -92,6 +92,7 @@ header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:col
 .status{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--surface);color:var(--muted);white-space:nowrap}
 .status.live{color:var(--accent)}
 .reel p{margin:0;color:var(--muted);font-size:.95rem}
+.reel p.note{font-size:.78rem!important;font-style:italic;line-height:1.45;padding-left:10px;border-left:2px solid color-mix(in srgb,var(--ink) 25%,transparent)}
 .player{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:14px;padding:12px}
 .play{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer;display:grid;place-items:center}
 .play[disabled]{background:var(--line);color:var(--muted);cursor:not-allowed}
@@ -208,7 +209,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
     <div class="wrap">
       <p class="eyebrow">Demo reels</p>
       <h2>Have a listen</h2>
-      <p class="lede">Short original spots across animation, meditation, commercial, audiobook, e-learning, corporate, and customer service styles. All brands and characters are fictional. Press play, or open a script to follow along. If you need a specific read, send a sample script and I'll record a free audition.</p>
+      <p class="lede">Short spots across animation, meditation, commercial, audiobook, e-learning, corporate, and customer service styles. Most are original scripts, and all brands and characters in them are fictional. The audiobook excerpts are coaching and audition scripts, as noted on each. Press play, or open a script to follow along. If you need a specific read, send a sample script and I'll record a free audition.</p>
       <div class="demos" id="demoGrid"></div>
     </div>
   </section>
@@ -352,6 +353,7 @@ const DEMOS = [
  },
  {
   "id": "romance",
+  "note": "Practice excerpt. Script provided by my voice coach for coaching and audition practice. Not my original work; all rights belong to the author.",
   "cat": "Romance Audiobook",
   "title": "Narration sample",
   "tint": "t1",
@@ -366,6 +368,7 @@ const DEMOS = [
  },
  {
   "id": "mgfantasy",
+  "note": "Practice excerpt. Script provided by my voice coach for coaching and audition practice. Not my original work; all rights belong to the author.",
   "cat": "Middle Grade Fantasy Audiobook",
   "title": "Family dialogue",
   "tint": "t2",
@@ -376,6 +379,21 @@ const DEMOS = [
    "Versatile",
    "Character voices",
    "Family-friendly"
+  ]
+ },
+ {
+  "id": "worrybugs",
+  "cat": "Children's Audiobook",
+  "title": "Worry Bugs",
+  "tint": "t3",
+  "file": "demos/audiobook-childrens-worry-bugs.mp3",
+  "len": "1 min",
+  "desc": "Gentle, playful storytelling that keeps young listeners comforted and engaged.",
+  "note": "Audition excerpt. Recorded as an ACX audition for this title. Not my original work; all rights belong to the author.",
+  "tags": [
+   "Gentle",
+   "Playful",
+   "Kid-friendly"
   ]
  },
  {
@@ -442,6 +460,7 @@ DEMOS.forEach((d, i) => {
   const scriptHtml = d.script ? esc(d.script).split("\n").map(l => "<p>" + l.replace(/\[([^\]]+)\]/g, '<em>[$1]</em>') + "</p>").join("") : "";
   el.innerHTML = `<div class="reel-head"><div><p class="cat">${d.title} · ${d.len}</p><h3>${d.cat}</h3></div><span class="status">Coming soon</span></div>
     <p>${d.desc}</p>
+    ${d.note ? `<p class="note">${d.note}</p>` : ""}
     <div class="player"><button class="play" type="button" aria-label="Play ${d.cat} demo: ${d.title}" disabled>${PLAY}</button>
       <div class="track"><canvas></canvas><div class="time"><span class="cur">0:00</span><span class="dur">—</span></div></div></div>
     <div class="tags">${d.tags.map(t=>`<span>${t}</span>`).join("")}</div>
