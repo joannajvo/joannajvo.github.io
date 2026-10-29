@@ -302,7 +302,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
         <div class="row" style="align-items:end">
           <label for="f-use">Usage<span class="sub">Where the recording will run and for how long</span><input id="f-use" name="Usage" placeholder="e.g. Social media ads, 1 year, US"></label>
           <label for="f-ref">How did you find me?
-            <select id="f-ref" name="Found me via">
+            <select id="f-ref" name="Found me via" required>
               <option value="" disabled selected>Choose one</option>
               <option>Voices.com</option><option>ACX</option><option>Google search</option>
               <option>Other social media</option><option>Referral / word of mouth</option><option>Other</option>
@@ -582,6 +582,12 @@ document.getElementById("inquiry").addEventListener("submit", e => {
   const hint = document.getElementById("formHint");
   if(!v("f-name") || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("f-email"))){
     e.preventDefault(); hint.textContent = "Please add your name and a valid email so Joanna can reply."; return;
+  }
+  if(!document.querySelector("input.budget:checked")){
+    e.preventDefault(); hint.textContent = "Please check at least one budget option (\"Not sure yet\" is fine)."; document.querySelector("input.budget").focus(); return;
+  }
+  if(!v("f-ref")){
+    e.preventDefault(); hint.textContent = "Please let me know how you found me."; document.getElementById("f-ref").focus(); return;
   }
   document.getElementById("h-deadline").value = document.getElementById("f-nodue").checked ? "No deadline / flexible" : (v("f-due") || "Not given");
   const picks = [...document.querySelectorAll("input.budget:checked")].map(c => c.value);
