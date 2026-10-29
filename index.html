@@ -162,6 +162,15 @@ textarea{min-height:90px;resize:vertical}
 label.check{display:flex;align-items:center;gap:8px;font-weight:500;font-size:.85rem;color:var(--muted);cursor:pointer}
 label.check input{width:auto;accent-color:var(--accent)}
 input:disabled{opacity:.5}
+fieldset{border:0;margin:0;padding:0;min-width:0;display:grid;gap:8px}
+legend{font-weight:600;font-size:.88rem;padding:0;margin-bottom:6px}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+@media (max-width:520px){.checks{grid-template-columns:1fr}}
+.checks label.check{align-items:flex-start;color:var(--ink);line-height:1.35}
+.checks label.check input{margin-top:3px}
+.checks .note{display:block;font-weight:400;font-size:.78rem;color:var(--muted)}
+.checks label.check:has(input:disabled){opacity:.55;cursor:not-allowed}
+[hidden]{display:none!important}
 footer{padding-block:32px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 
@@ -292,6 +301,26 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
         </div>
         <div class="row">
           <label for="f-use">Usage<span class="sub">Where the recording will run and for how long</span><input id="f-use" name="Usage" placeholder="e.g. Social media ads, 1 year, US"></label>
+        </div>
+        <fieldset>
+          <legend>Budget options<span class="sub" style="display:block;margin-top:2px">Check any that work for your project</span></legend>
+          <div class="checks">
+            <label class="check"><input type="checkbox" class="budget" value="Flat project rate"> <span>Flat project rate<span class="note">One price for the finished recording</span></span></label>
+            <label class="check"><input type="checkbox" class="budget" value="Hourly / per finished hour"> <span>Hourly or per finished hour<span class="note">Common for audiobooks and longer reads</span></span></label>
+            <label class="check"><input type="checkbox" class="budget" id="b-royalty" value="Royalty share (audiobook under 2 finished hours)"> <span>Royalty share<span class="note" id="royaltyNote">Audiobooks only, under 2 finished hours (about 18,000 words or less)</span></span></label>
+            <label class="check"><input type="checkbox" class="budget" value="Not sure yet / let's talk"> <span>Not sure yet<span class="note">Happy to talk through options</span></span></label>
+          </div>
+          <label for="f-budget"><span>Budget amount <span style="font-weight:400;color:var(--muted)">(optional)</span></span><input id="f-budget" name="Budget amount" placeholder="e.g. $250, or $200 per finished hour"></label>
+        </fieldset>
+        <input type="hidden" name="Budget options" id="h-budget" value="">
+        <div class="row">
+          <label for="f-ref">How did you find me?
+            <select id="f-ref" name="Found me via">
+              <option value="" disabled selected>Choose one</option>
+              <option>Voices.com</option><option>ACX</option><option>Google search</option>
+              <option>Other social media</option><option>Referral / word of mouth</option><option>Other</option>
+            </select></label>
+          <label for="f-ref-more" id="refMoreWrap" hidden><span id="refMoreLabel">Tell me more</span><input id="f-ref-more" name="Found me via (details)" placeholder="Who referred you?"></label>
         </div>
         <label for="f-notes">Direction or notes<textarea id="f-notes" name="Notes" placeholder="Tone, pace, references, or anything else I should know"></textarea></label>
         <button class="btn" type="submit" id="sendBtn">Send inquiry</button>
@@ -543,6 +572,21 @@ async function copyText(text, okMsg, selectEl){
 }
 document.getElementById("copyEmail").addEventListener("click", () => copyText(document.getElementById("emailAddr").textContent, "Email copied", document.getElementById("emailAddr")));
 document.getElementById("f-nodue").addEventListener("change", e => { const d = document.getElementById("f-due"); d.disabled = e.target.checked; if(e.target.checked) d.value = ""; });
+const typeSel = document.getElementById("f-type"), royalty = document.getElementById("b-royalty"), royaltyNote = document.getElementById("royaltyNote");
+function syncRoyalty(){
+  const isBook = typeSel.value === "Audiobook";
+  royalty.disabled = !isBook; if(!isBook) royalty.checked = false;
+  royaltyNote.textContent = isBook ? "Audiobooks under 2 finished hours only (about 18,000 words or less)" : "Audiobooks only, under 2 finished hours. Choose Audiobook above to select.";
+}
+typeSel.addEventListener("change", syncRoyalty); syncRoyalty();
+const refSel = document.getElementById("f-ref");
+refSel.addEventListener("change", () => {
+  const show = refSel.value === "Other" || refSel.value === "Referral / word of mouth";
+  document.getElementById("refMoreWrap").hidden = !show;
+  document.getElementById("refMoreLabel").textContent = refSel.value === "Other" ? "Where did you find me?" : "Who referred you?";
+  document.getElementById("f-ref-more").placeholder = refSel.value === "Other" ? "e.g. a podcast, a newsletter" : "Name of the person or company";
+  if(!show) document.getElementById("f-ref-more").value = "";
+});
 document.getElementById("inquiry").addEventListener("submit", e => {
   const v = id => document.getElementById(id).value.trim();
   const hint = document.getElementById("formHint");
@@ -550,6 +594,8 @@ document.getElementById("inquiry").addEventListener("submit", e => {
     e.preventDefault(); hint.textContent = "Please add your name and a valid email so Joanna can reply."; return;
   }
   document.getElementById("h-deadline").value = document.getElementById("f-nodue").checked ? "No deadline / flexible" : (v("f-due") || "Not given");
+  const picks = [...document.querySelectorAll("input.budget:checked")].map(c => c.value);
+  document.getElementById("h-budget").value = picks.length ? picks.join(", ") : "Not given";
   document.getElementById("h-subject").value = "New voice over inquiry from " + v("f-name");
   document.getElementById("h-auto").value = "Hi " + v("f-name") + ", thanks for reaching out! I've received your voice over request and will reply within 1 business day. Talk soon, Joanna J.";
   const btn = document.getElementById("sendBtn"); btn.textContent = "Sending…";
