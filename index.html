@@ -299,29 +299,26 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
             <select id="f-type" name="Project type"><option>Commercial</option><option>Character / animation</option><option>Audiobook</option><option>Other</option></select></label>
           <label for="f-len">Script length<input id="f-len" name="Script length" placeholder="e.g. 30-second spot, 250 words"></label>
         </div>
-        <div class="row">
+        <div class="row" style="align-items:end">
           <label for="f-use">Usage<span class="sub">Where the recording will run and for how long</span><input id="f-use" name="Usage" placeholder="e.g. Social media ads, 1 year, US"></label>
-        </div>
-        <fieldset>
-          <legend>Budget options<span class="sub" style="display:block;margin-top:2px">Check any that work for your project</span></legend>
-          <div class="checks">
-            <label class="check"><input type="checkbox" class="budget" value="Flat project rate"> <span>Flat project rate<span class="note">One price for the finished recording</span></span></label>
-            <label class="check"><input type="checkbox" class="budget" value="Hourly / per finished hour"> <span>Hourly or per finished hour<span class="note">Common for audiobooks and longer reads</span></span></label>
-            <label class="check"><input type="checkbox" class="budget" id="b-royalty" value="Royalty share (audiobook under 2 finished hours)"> <span>Royalty share<span class="note" id="royaltyNote">Audiobooks only, under 2 finished hours (about 18,000 words or less)</span></span></label>
-            <label class="check"><input type="checkbox" class="budget" value="Not sure yet / let's talk"> <span>Not sure yet<span class="note">Happy to talk through options</span></span></label>
-          </div>
-          <label for="f-budget"><span>Budget amount <span style="font-weight:400;color:var(--muted)">(optional)</span></span><input id="f-budget" name="Budget amount" placeholder="e.g. $250, or $200 per finished hour"></label>
-        </fieldset>
-        <input type="hidden" name="Budget options" id="h-budget" value="">
-        <div class="row">
           <label for="f-ref">How did you find me?
             <select id="f-ref" name="Found me via">
               <option value="" disabled selected>Choose one</option>
               <option>Voices.com</option><option>ACX</option><option>Google search</option>
               <option>Other social media</option><option>Referral / word of mouth</option><option>Other</option>
             </select></label>
-          <label for="f-ref-more" id="refMoreWrap" hidden><span id="refMoreLabel">Tell me more</span><input id="f-ref-more" name="Found me via (details)" placeholder="Who referred you?"></label>
         </div>
+        <label for="f-ref-more" id="refMoreWrap" hidden><span id="refMoreLabel">Tell me more</span><input id="f-ref-more" name="Found me via (details)" placeholder="Who referred you?"></label>
+        <fieldset>
+          <legend>Budget options<span class="sub" style="display:block;margin-top:2px">Check any that work for your project</span></legend>
+          <div class="checks">
+            <label class="check"><input type="checkbox" class="budget" value="Flat project rate"> <span>Flat project rate<span class="note">One price for the finished recording</span></span></label>
+            <label class="check"><input type="checkbox" class="budget" value="Hourly / per finished hour"> <span>Hourly or per finished hour<span class="note">Common for audiobooks and longer reads</span></span></label>
+            <label class="check"><input type="checkbox" class="budget" value="Not sure yet / let's talk"> <span>Not sure yet<span class="note">Happy to talk through options</span></span></label>
+          </div>
+          <label for="f-budget"><span>Budget amount <span style="font-weight:400;color:var(--muted)">(optional)</span></span><input id="f-budget" name="Budget amount" placeholder="e.g. $250, or $200 per finished hour"></label>
+        </fieldset>
+        <input type="hidden" name="Budget options" id="h-budget" value="">
         <label for="f-notes">Direction or notes<textarea id="f-notes" name="Notes" placeholder="Tone, pace, references, or anything else I should know"></textarea></label>
         <button class="btn" type="submit" id="sendBtn">Send inquiry</button>
         <p class="hint" id="formHint">Your message goes straight to Joanna's inbox, and you'll get an email confirming it arrived.</p>
@@ -572,13 +569,6 @@ async function copyText(text, okMsg, selectEl){
 }
 document.getElementById("copyEmail").addEventListener("click", () => copyText(document.getElementById("emailAddr").textContent, "Email copied", document.getElementById("emailAddr")));
 document.getElementById("f-nodue").addEventListener("change", e => { const d = document.getElementById("f-due"); d.disabled = e.target.checked; if(e.target.checked) d.value = ""; });
-const typeSel = document.getElementById("f-type"), royalty = document.getElementById("b-royalty"), royaltyNote = document.getElementById("royaltyNote");
-function syncRoyalty(){
-  const isBook = typeSel.value === "Audiobook";
-  royalty.disabled = !isBook; if(!isBook) royalty.checked = false;
-  royaltyNote.textContent = isBook ? "Audiobooks under 2 finished hours only (about 18,000 words or less)" : "Audiobooks only, under 2 finished hours. Choose Audiobook above to select.";
-}
-typeSel.addEventListener("change", syncRoyalty); syncRoyalty();
 const refSel = document.getElementById("f-ref");
 refSel.addEventListener("change", () => {
   const show = refSel.value === "Other" || refSel.value === "Referral / word of mouth";
